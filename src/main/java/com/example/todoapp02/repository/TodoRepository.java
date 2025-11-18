@@ -27,7 +27,7 @@ public class TodoRepository {
         return storage.get(id);
     }
 
-    public void deleteByID(Long id) {
+    public void deleteById(Long id) {
         storage.remove(id);
     }
 }
