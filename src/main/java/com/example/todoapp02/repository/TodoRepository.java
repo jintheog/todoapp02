@@ -14,7 +14,9 @@ public class TodoRepository {
     private Long nextId = 1L;
 
     public TodoDTO save(TodoDTO todo) {
-        todo.setId(nextId++);
+        if(todo.getId()==null){
+            todo.setId(nextId++);
+        }
         storage.put(todo.getId(), todo);
         return todo;
     }
@@ -30,4 +32,6 @@ public class TodoRepository {
     public void deleteById(Long id) {
         storage.remove(id);
     }
+
+
 }
