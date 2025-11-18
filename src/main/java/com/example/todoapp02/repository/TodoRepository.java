@@ -20,4 +20,8 @@ public class TodoRepository {
     public List<TodoDTO> findAll() {
         return new ArrayList<>(storage.values());
     }
+
+    public TodoDTO findById(Long id) {
+        return storage.get(id);
+    }
 }
