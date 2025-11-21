@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
@@ -25,10 +26,9 @@ public class TodoRepository {
         return new ArrayList<>(storage.values());
     }
 
-    public TodoDTO findById(Long id) {
-        return storage.get(id);
+    public Optional<TodoDTO> findById(Long id) {
+        return Optional.ofNullable(storage.get(id));
     }
-
     public void deleteById(Long id) {
         storage.remove(id);
     }

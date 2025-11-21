@@ -46,9 +46,16 @@ public class TodoController {
 
     @GetMapping("/todos/{id}")
     public String detail(@PathVariable Long id, Model model) {
-        TodoDTO todo = todoRepository.findById(id);
-        model.addAttribute("todo",todo);
-        return "detail";
+        try {
+            TodoDTO todo = todoRepository.findById(id)
+                    .orElseThrow(()-> new IllegalArgumentException("todo not found"));
+
+            model.addAttribute("todo",todo);
+            return "detail";
+        } catch (IllegalArgumentException e) {
+            return "redirect:/todos";
+        }
+
     }
 
     @GetMapping("/todos/{id}/delete")
@@ -59,9 +66,15 @@ public class TodoController {
 
     @GetMapping("/todos/{id}/edit")
     public String edit(@PathVariable Long id, Model model) {
-        TodoDTO todo = todoRepository.findById(id);
-        model.addAttribute("todo",todo);
-        return "edit";
+        try {
+            TodoDTO todo = todoRepository.findById(id)
+                            .orElseThrow(()-> new IllegalArgumentException("todo not found"));
+            model.addAttribute("todo",todo);
+            return "edit";
+        } catch (IllegalArgumentException e) {
+            return "redirect:/todos";
+        }
+
     }
 
     @GetMapping()
@@ -71,15 +84,19 @@ public class TodoController {
             @RequestParam String content,
             @RequestParam(defaultValue="false") Boolean complete,
             Model model) {
+        try{
+            TodoDTO todo = todoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("to do not found"));
 
-        TodoDTO todo = todoRepository.findById(id);
+            todo.setTitle(title);
+            todo.setContent(content);
+            todo.setCompleted(complete);
 
-        todo.setTitle(title);
-        todo.setContent(content);
-        todo.setCompleted(complete);
+            todoRepository.save(todo);
 
-        todoRepository.save(todo);
+            return "redirect:/todos" + id;
+        } catch (IllegalArgumentException e) {
+            return "redirect:/todos";
+        }
 
-        return "redirect:/todos" + id;
     }
 }
