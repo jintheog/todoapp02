@@ -97,6 +97,12 @@ public class TodoController {
         } catch (IllegalArgumentException e) {
             return "redirect:/todos";
         }
+    }
 
+    @GetMapping("/todos/search")
+    public String search(@RequestParam String keyword, Model model){
+        List<TodoDTO> todos = todoRepository.findByTitleContaining(keyword);
+        model.addAttribute("todos", todos);
+        return "todos";
     }
 }
